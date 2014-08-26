@@ -97,3 +97,16 @@ describe('CPlate:Errors', function() {
         expect(cplate.formatArray.bind(cplate, '', {})).to.throw(TypeError);
     });
 });
+
+describe('CPlate:Filters', function() {
+    var cplate = null;
+
+    beforeEach(function() {
+        cplate = new CPlate();
+    });
+
+    it('should right align text', function() {
+        expect(cplate.format('{{value|rightalign:5}}', {value: 43})).to.be.equal('   43');
+        expect(cplate.format('{{value|rightalign:2}}', {value: 2743})).to.be.equal('2743');
+    });
+});
