@@ -1,6 +1,6 @@
 var _ = require('lodash')
     , expect = require('chai').expect
-    , CPlate = require('../index');
+    , CPlate = require('../index').CPlate;
 
 describe('CPlate', function() {
     var cplate = null;
