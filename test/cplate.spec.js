@@ -109,4 +109,33 @@ describe('CPlate:Filters', function() {
         expect(cplate.format('{{value|rightalign:5}}', {value: 43})).to.be.equal('   43');
         expect(cplate.format('{{value|rightalign:2}}', {value: 2743})).to.be.equal('2743');
     });
+
+    it('should colorize output', function() {
+        var str = cplate.format('{{value|colorize:green|colorize:underline}}', {value: 43});
+        console.log('\tColorized Meaning of Life + 1? = ' + str);
+
+        str = cplate.format('{{value|colorize:yellow:underline}}', {value: 43});
+        console.log('\tColorized Meaning of Life + 1? = ' + str);
+
+        var array = cplate.formatArray([
+            '\t{{info|colorize:info}}',
+            '\t{{warn|colorize:warn}}',
+            '\t{{debug|colorize:debug}}',
+            '\t{{error|colorize:error|colorize:underline}}'
+        ], {
+            info: 'info',
+            warn: 'warn',
+            debug: 'debug',
+            error: 'error',
+            theme: {
+                info: 'yellow',
+                warn: 'green',
+                debug: 'magenta',
+                error: 'grey'
+            }
+        });
+        _.forEach(array, function(value) {
+            console.log(value);
+        });
+    });
 });
