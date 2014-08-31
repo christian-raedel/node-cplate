@@ -34,7 +34,7 @@ describe('CPlate', function() {
     });
 
     it('should format a string with argumented filter', function() {
-        cplate.registerFilter('filterA', function(value, opts, param) {
+        cplate.registerFilter('filterA', function(value, opts, placeholder, param) {
             param = parseInt(param);
             return value + param;
         });
@@ -44,9 +44,9 @@ describe('CPlate', function() {
     });
 
     it('should format a string with multiple argumented filters', function() {
-        cplate.registerFilter('filterA', function(value, opts, param) {
+        cplate.registerFilter('filterA', function(value, opts, placeholder, param) {
             return opts['add'].apply(null, [value, param]);
-        }).registerFilter('filterB', function(value, opts, param) {
+        }).registerFilter('filterB', function(value, opts, placeholder, param) {
             param = parseInt(param);
             return value / param;
         });
@@ -121,12 +121,14 @@ describe('CPlate:Filters', function() {
             '\t{{info|colorize:info}}',
             '\t{{warn|colorize:warn}}',
             '\t{{debug|colorize:debug}}',
-            '\t{{error|colorize:error|colorize:underline}}'
+            '\t{{error|colorize:error|colorize:underline}}',
+            '\t{{level|colorize}}'
         ], {
             info: 'info',
             warn: 'warn',
             debug: 'debug',
             error: 'error',
+            level: 'info',
             theme: {
                 info: 'yellow',
                 warn: 'green',
@@ -137,5 +139,23 @@ describe('CPlate:Filters', function() {
         _.forEach(array, function(value) {
             console.log(value);
         });
+    });
+
+    it('should capitalize output', function () {
+        expect(cplate.format('{{value|capitalize}}', {value: 'inge'})).to.be.equal('Inge');
+    });
+
+    it('should camelcase output', function () {
+        expect(cplate.format('{{value|camelcase}}', {value: 'inge-world'})).to.be.equal('IngeWorld');
+    });
+
+    it('should uppercase output', function () {
+        expect(cplate.format('{{value|uppercase}}', {value: 'inge'})).to.be.equal('INGE');
+    });
+
+    it('should format datetime', function () {
+        var date = new Date('2014-08-31 00:05:27');
+        expect(cplate.format('{{value|datetime}}', {value: date})).to.be.equal('August 31st 2014, 00:05:27');
+        expect(cplate.format('{{value|datetime:DD. MMMM YYYY HH:mm:ss}}', {value: date})).to.be.equal('31. August 2014 00:05:27');
     });
 });
