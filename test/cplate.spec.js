@@ -158,4 +158,31 @@ describe('CPlate:Filters', function() {
         expect(cplate.format('{{value|datetime}}', {value: date})).to.be.equal('August 31st 2014, 00:05:27');
         expect(cplate.format('{{value|datetime:DD. MMMM YYYY HH:mm:ss}}', {value: date})).to.be.equal('31. August 2014 00:05:27');
     });
+
+    it('should finalize output', function () {
+        cplate.registerFilter('transformer', function (value) {
+            if (value) {
+                return JSON.stringify(value);
+            }
+        })
+        .registerFilter('finalizer', function (value) {
+            return value.toString().split('').reverse().join('');
+        });
+        expect(cplate.format('{{value|uppercase}}', {value: '$inge'})).to.be.deep.equal(JSON.stringify('EGNI$'));
+        cplate.unregisterFilter('finalizer');
+        expect(cplate.format('{{value}}', {value: {}})).to.be.deep.equal(JSON.stringify({}));
+    });
+});
+
+describe('CPlate:CustomDelimiter', function () {
+    it('should work with "<%= . : %>"', function () {
+        var cplate = new CPlate({delimiter: '<%= . : %>'});
+        console.log(cplate.format('\tThe Meaning of Life = <%= level.colorize: grey %>!', {level: 42}));
+    });
+
+    it('should work with "% | : %"', function () {
+        var cplate = new CPlate({delimiter: '% | : %'});
+        console.log(cplate.format('\tThe Meaning of Life = %inge|colorize:yellow%!', {inge: 'Inge'}));
+        console.log(cplate.format('\tThe Meaning of DateTime = %inge|datetime:HH:mm:ss|colorize:red%!', {inge: new Date()}));
+    });
 });
