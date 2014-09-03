@@ -71,6 +71,10 @@ describe('CPlate', function() {
             'The Meaning of Life is 42!'
         ]);
     });
+
+    it('should resolve a value by path', function () {
+        expect(cplate.format('{{value.key||uppercase}}', {value: {key: 'twenty-seven'}})).to.be.equal('TWENTY-SEVEN');
+    });
 });
 
 describe('CPlate:Errors', function() {
