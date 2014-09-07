@@ -15,7 +15,7 @@ describe('CPlate', function() {
 
     it('should register a new filter function', function() {
         expect(cplate.registerFilter('echo', function(value) { return value; })).to.be.an.instanceof(CPlate);
-        expect(cplate.filters['echo']).to.be.a('function');
+        expect(cplate.config.getValue('filter')['echo']).to.be.a('function');
     });
 
     it('should format a string', function() {
@@ -59,7 +59,7 @@ describe('CPlate', function() {
     it('should unregister a filter', function() {
         cplate.registerFilter('echo', function(value) { return value; });
         expect(cplate.unregisterFilter('echo')).to.be.an.instanceof(CPlate);
-        expect(cplate.filters['echo']).to.be.not.ok;
+        expect(cplate.config.getValue('filter')['echo']).to.be.not.ok;
     });
 
     it('should format an array of strings', function() {

@@ -17,6 +17,19 @@ var id = setInterval(function () {
     for (var i = 0; i < 102; i++) {
         var str = cplate.format('current time: {{date|datetime:HH:mm:ss|colorize:grey}}', {date: new Date()});
         str += cplate.format(' samples: {{value|rightalign:10|camelcase|capitalize|uppercase}}', {value: 'inge'});
+        str += cplate.format(' samples: {{value2|rightalign:10|camelcase|capitalize|uppercase}}{{value3|rightalign:10|camelcase|capitalize|uppercase}}{{value4|rightalign:10|camelcase|capitalize|uppercase}}{{value5|rightalign:10|camelcase|capitalize|uppercase}}{{value6|rightalign:10|camelcase|capitalize|uppercase}}{{value7|rightalign:10|camelcase|capitalize|uppercase}}{{value8|rightalign:10|camelcase|capitalize|uppercase}}{{value9|rightalign:10|camelcase|capitalize|uppercase}}{{value10|rightalign:10|camelcase|capitalize|uppercase}}{{value11|rightalign:10|camelcase|capitalize|uppercase}}{{value12|rightalign:10|camelcase|capitalize|uppercase}}', {
+            value2: 'inge',
+            value3: '$inge',
+            value4: '$inge',
+            value5: '$inge',
+            value6: '$inge',
+            value7: '$inge',
+            value8: '$inge',
+            value9: '$inge',
+            value10: '$inge',
+            value11: '$inge',
+            value12: '$inge',
+        });
         console.log(str);
     }
     var diff = heapDiff.end();
