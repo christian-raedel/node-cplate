@@ -4,7 +4,7 @@ install:
 	@echo "************************"
 	@echo "* INSTALL DEPENDENCIES *"
 	@echo "************************"
-	@npm install
+	@npm install --python=/usr/bin/python2.7
 
 test:
 	@echo "************************"
