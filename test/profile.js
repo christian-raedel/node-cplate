@@ -16,6 +16,7 @@ var id = setInterval(function () {
     var heapDiff = new memwatch.HeapDiff();
     for (var i = 0; i < 102; i++) {
         var str = cplate.format('current time: {{date|datetime:HH:mm:ss|colorize:grey}}', {date: new Date()});
+        str += cplate.format(' samples: {{value|rightalign:10|camelcase|capitalize|uppercase}}', {value: 'inge'});
         console.log(str);
     }
     var diff = heapDiff.end();
