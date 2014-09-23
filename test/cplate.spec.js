@@ -1,4 +1,5 @@
-var _ = require('lodash')
+var _        = require('lodash')
+    , fs     = require('fs')
     , expect = require('chai').expect
     , CPlate = require('../index').CPlate;
 
@@ -54,6 +55,14 @@ describe('CPlate', function() {
         var str = 'Is the Meaning of Life {{life|filterB:2}} or {{inge|filterA:6|filterB:7}}?';
         expect(cplate.format(str, {life: 84, inge: 43, add: function(a, b) { return a + b; }}))
             .to.be.equal('Is the Meaning of Life 42 or 7?');
+    });
+
+    it('should use a filter as chain starting point', function () {
+        cplate.registerFilter('filterB', function (opts) {
+            expect(opts).to.have.property('name', 'inge');
+            return 'egni';
+        });
+        expect(cplate.format('{{filterB|uppercase}}', {name: 'inge'})).to.be.equal('EGNI');
     });
 
     it('should unregister a filter', function() {
@@ -188,5 +197,41 @@ describe('CPlate:CustomDelimiter', function () {
         var cplate = new CPlate({delimiter: '% | : %'});
         console.log(cplate.format('\tThe Meaning of Life = %inge|colorize:yellow%!', {inge: 'Inge'}));
         console.log(cplate.format('\tThe Meaning of DateTime = %inge|datetime:HH:mm:ss|colorize:red%!', {inge: new Date()}));
+    });
+});
+
+describe('CPlate:Compile', function () {
+    var filename = __dirname + '/test.tpl';
+
+    beforeEach(function () {
+        fs.writeFileSync(filename, '{{value|uppercase}}', {encoding: 'utf-8'});
+    });
+
+    afterEach(function () {
+        fs.unlinkSync(filename);
+    });
+
+    it('should compile template from file using cache', function (done) {
+        var cplate = new CPlate();
+        cplate.compile(filename, {value: 'inge'})
+        .then(function (text) {
+            expect(cplate.cache).to.have.property(filename, '{{value|uppercase}}');
+            expect(text).to.be.equal('INGE');
+
+            cplate.compile(filename, {value: 'egni'})
+            .then(function (text) {
+                expect(cplate.clear()).to.have.property('cache').that.deep.equals({});
+                expect(text).to.be.equal('EGNI');
+                done();
+            })
+            .catch(function (err) {
+                done(new Error(err));
+            })
+            .done();
+        })
+        .catch(function (err) {
+            done(new Error(err));
+        })
+        .done();
     });
 });
